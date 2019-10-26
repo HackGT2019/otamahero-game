@@ -1,11 +1,15 @@
 import Phaser, { Scene } from "phaser";
 import logoImg from "./assets/connor.jpg";
+import despacito from './assets/audio/despacito/despacito';
+import {MusicParser} from "./audio/music-parser";
 
 var hand;
 var cursors;
 var notes;
 const SPEED = 1;
 const OVERLAP = 1000;
+
+new MusicParser(despacito);
 
 const config = {
   type: Phaser.AUTO,
@@ -46,9 +50,9 @@ function update() {
     notesArr[i].setPosition(notesArr[i].x - SPEED, notesArr[i].y);
     if (Math.abs(hand.y - notesArr[i].y) < OVERLAP && Math.abs(hand.x - notesArr[i].x) < notesArr[i].width / 2) {
       //play overlap animation
-      console.log("it overlapped");
+      // console.log("it overlapped");
     } else {
-      console.log("not overlapping");
+      // console.log("not overlapping");
     }
     if (notesArr[i].x + (notesArr[i].width / 2) < 0) {
       notes.remove(notesArr[i], true, true);
