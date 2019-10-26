@@ -2,6 +2,7 @@ import Phaser, { Scene } from "phaser";
 import logoImg from "./assets/connor.jpg";
 import despacito from './assets/audio/despacito/despacito';
 import {MusicParser} from "./audio/music-parser";
+import {makeSoundWrapper} from "./makeSound.js";
 
 var hand;
 var cursors;
@@ -42,7 +43,9 @@ function preload() {
 }
 
 function create() {
+  makeSoundWrapper();
   hand = this.physics.add.sprite(400, 150, 'connor2').setScale(.25);
+
   hand.depth = 2;
   cursors = this.input.keyboard.createCursorKeys();
   notes = this.add.group(config);
