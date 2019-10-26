@@ -79,6 +79,9 @@ function onVideoStopped() {
 }
 //to be called from game's world clock (or something idk)
 function getMouth() {
+    if (smiles == null || smiles == undefined) {
+        return false;
+    }
     let isMouthOpen = true;
     if(smiles.size() > 0) {
         isMouthOpen = false;
@@ -87,7 +90,7 @@ function getMouth() {
 }
 function getFistPos() {
     let biggestFistInd = 0;
-    if (fists.size() > 0) {
+    if (!(fists == undefined) && fists.size() > 0) {
         //find biggest fist
         for (let i = 0; i < fists.size(); ++i) {
             let fist = fists.get(i);
@@ -102,7 +105,7 @@ function getFistPos() {
         //normalize values
         return 1 - (fist.y / (video.height - fist.height));
     } else {
-        return -1;
+        return -261.63;
     }
 }
 utils.loadOpenCv(() => {
