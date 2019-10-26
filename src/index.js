@@ -3,7 +3,7 @@ import logoImg from "./assets/logo.png";
 
 const config = {
   type: Phaser.AUTO,
-  parent: "phaser-example",
+  parent: "game",
   width: 800,
   height: 600,
   scene: {
@@ -16,11 +16,13 @@ const game = new Phaser.Game(config);
 
 function preload() {
   this.load.image("logo", logoImg);
+  this.load.audio("despacito", 'src/assets/audio/despacito/wav_despacito_NO_VOCALS.wav');  // urls: an array of file url
+
 }
 
 function create() {
   const logo = this.add.image(400, 150, "logo");
-
+  this.sound.add('despacito');
   this.tweens.add({
     targets: logo,
     y: 450,
@@ -29,4 +31,5 @@ function create() {
     yoyo: true,
     loop: -1
   });
+  this.sound.play('despacito');
 }
