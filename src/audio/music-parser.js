@@ -22,7 +22,6 @@ export class MusicParser {
         this.extrema = this._getMinAndMax(noteEvents);
         this.yConversionFactor = this._getYConversionFactor(this.gameHeight, this.NOTE_BLOCK_HEIGHT_PX, this.extrema);
         this.noteBlocks = this._generateNoteBlocks(noteEvents);
-        console.log(this.noteBlocks);
     }
 
     _generateNoteBlocks(noteEvents) {
