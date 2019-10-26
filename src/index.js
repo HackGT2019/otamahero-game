@@ -5,7 +5,7 @@ var hand;
 var cursors;
 var notes;
 const SPEED = 2;
-const OVERLAP = 1000;
+const OVERLAP = 10;
 
 const config = {
   type: Phaser.AUTO,
@@ -32,13 +32,13 @@ const game = new Phaser.Game(config);
 
 function preload() {
   this.load.image('connor', logoImg);
-  this.load.spritesheet('connor2', logoImg, {frameWidth: 144, frameHeight: 188, startFrame:0, endFrame:1});
+  this.load.spritesheet('connor2', logoImg, {frameWidth: 141, frameHeight: 188, startFrame:0, endFrame:1});
   //this.load.audio("despacito", 'src/assets/audio/despacito/wav_despacito_NO_VOCALS.wav');  // urls: an array of file url
 
 }
 
 function create() {
-  hand = this.physics.add.sprite(400, 150, "connor2").setScale(.25);
+  hand = this.physics.add.sprite(400, 150, 'connor2').setScale(.25);
   hand.depth = 2;
   cursors = this.input.keyboard.createCursorKeys();
   notes = this.add.group(config);
@@ -47,9 +47,8 @@ function create() {
   this.anims.create({
     key: 'notOverlap',
     //frames: [ {key: 'connor2', frame : 0 } ],
-    frames: this.anims.generateFrameNumbers('connor2', { start: 0, end:1}),
+    frames: [ { key: 'connor2', frame: 0 } ],
     frameRate: 20,
-    repeat: -1,
   });
   this.anims.create({
     key: 'overlap',
