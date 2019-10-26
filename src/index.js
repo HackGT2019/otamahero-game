@@ -4,7 +4,7 @@ import logoImg from "./assets/connor.jpg";
 var hand;
 var cursors;
 var notes;
-const SPEED = 1;
+const SPEED = 2;
 const OVERLAP = 1000;
 
 const config = {
@@ -16,6 +16,13 @@ const config = {
     preload: preload,
     create: create,
     update: update
+  },
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: { y:0},
+      debug: false
+    }
   }
 };
 
@@ -24,18 +31,32 @@ const config = {
 const game = new Phaser.Game(config);
 
 function preload() {
-  this.load.image("connor", logoImg);
+  this.load.image('connor', logoImg);
+  this.load.spritesheet('connor2', logoImg, {frameWidth: 144, frameHeight: 188, startFrame:0, endFrame:1});
   //this.load.audio("despacito", 'src/assets/audio/despacito/wav_despacito_NO_VOCALS.wav');  // urls: an array of file url
 
 }
 
 function create() {
-  hand = this.add.image(400, 150, "connor").setScale(.25);
+  hand = this.physics.add.sprite(400, 150, "connor2").setScale(.25);
   hand.depth = 2;
   cursors = this.input.keyboard.createCursorKeys();
   notes = this.add.group(config);
   notes.create(800, 200, "connor");
   notes.depth = 1;
+  this.anims.create({
+    key: 'notOverlap',
+    //frames: [ {key: 'connor2', frame : 0 } ],
+    frames: this.anims.generateFrameNumbers('connor2', { start: 0, end:1}),
+    frameRate: 20,
+    repeat: -1,
+  });
+  this.anims.create({
+    key: 'overlap',
+    frames: [ {key: 'connor2', frame : 1 } ],
+    frameRate: 20,
+  });
+
   //this.sound.add('despacito');
   //this.sound.play('despacito');
 }
@@ -44,11 +65,14 @@ function update() {
   let notesArr = notes.getChildren();
   for (let i = 0; i < notesArr.length; i++) {
     notesArr[i].setPosition(notesArr[i].x - SPEED, notesArr[i].y);
+    console.log(hand.anims.isPlaying);
     if (Math.abs(hand.y - notesArr[i].y) < OVERLAP && Math.abs(hand.x - notesArr[i].x) < notesArr[i].width / 2) {
       //play overlap animation
-      console.log("it overlapped");
+      this.anims.play('overlap',hand);
+      console.log('Entering Overlap');
     } else {
-      console.log("not overlapping");
+      this.anims.play('notOverlap',hand);
+      console.log('Not Entering Overlap');
     }
     if (notesArr[i].x + (notesArr[i].width / 2) < 0) {
       notes.remove(notesArr[i], true, true);
