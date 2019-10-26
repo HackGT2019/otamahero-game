@@ -5,6 +5,7 @@ var hand;
 var cursors;
 var notes;
 const SPEED = 1;
+const OVERLAP = 1000;
 
 const config = {
   type: Phaser.AUTO,
@@ -30,9 +31,11 @@ function preload() {
 
 function create() {
   hand = this.add.image(400, 150, "connor").setScale(.25);
+  hand.depth = 2;
   cursors = this.input.keyboard.createCursorKeys();
   notes = this.add.group(config);
   notes.create(800, 200, "connor");
+  notes.depth = 1;
   //this.sound.add('despacito');
   //this.sound.play('despacito');
 }
@@ -41,14 +44,20 @@ function update() {
   let notesArr = notes.getChildren();
   for (let i = 0; i < notesArr.length; i++) {
     notesArr[i].setPosition(notesArr[i].x - SPEED, notesArr[i].y);
+    if (Math.abs(hand.y - notesArr[i].y) < OVERLAP && Math.abs(hand.x - notesArr[i].x) < notesArr[i].width / 2) {
+      //play overlap animation
+      console.log("it overlapped");
+    } else {
+      console.log("not overlapping");
+    }
     if (notesArr[i].x + (notesArr[i].width / 2) < 0) {
       notes.remove(notesArr[i], true, true);
     }
   }
-  if (cursors.left.isDown) {
-    hand.setPosition(200,150);
-  } else if (cursors.right.isDown) {
-    hand.setPosition(600,150);
+  if (cursors.down.isDown) {
+    hand.setPosition(400,300);
+  } else if (cursors.up.isDown) {
+    hand.setPosition(400,0);
   } else {
     hand.setPosition(400,150);
   }
