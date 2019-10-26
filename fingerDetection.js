@@ -1,17 +1,21 @@
-let utils = new Utils('errorMessage');
-let streaming = false;
-let videoInput = document.getElementById('videoInput');
-let canvasOutput = document.getElementById('canvasOutput');
-let canvasContext = canvasOutput.getContext('2d');
+var utils = new Utils('errorMessage');
+var streaming = false;
+var videoInput = document.getElementById('videoInput');
+var canvasOutput = document.getElementById('canvasOutput');
+var canvasContext = canvasOutput.getContext('2d');
+var smiles;
+var fists;
+var video;
+
 function onVideoStarted() {
     streaming = true;
-    let video = document.getElementById('videoInput');
+    video = document.getElementById('videoInput');
     let src = new cv.Mat(video.height, video.width, cv.CV_8UC4);
     let dst = new cv.Mat(video.height, video.width, cv.CV_8UC4);
     let gray = new cv.Mat();
     let cap = new cv.VideoCapture(video);
-    let fists = new cv.RectVector();
-    let smiles = new cv.RectVector();
+    fists = new cv.RectVector();
+    smiles = new cv.RectVector();
     let fistClassifier = new cv.CascadeClassifier();
     let smileClassifier = new cv.CascadeClassifier();
 
@@ -56,10 +60,12 @@ function onVideoStarted() {
                 cv.rectangle(dst, point1, point2, [0, 255, 0, 255]);
             }
             cv.imshow('canvasOutput', dst);
+            //console.log(getFistPos());
             // schedule the next one.
             let delay = 1000/FPS - (Date.now() - begin);
             setTimeout(processVideo, delay);
         } catch (err) {
+            console.log(err);
             utils.printError(err);
         }
     };
@@ -71,7 +77,34 @@ function onVideoStopped() {
     streaming = false;
     canvasContext.clearRect(0, 0, canvasOutput.width, canvasOutput.height);
 }
-
+//to be called from game's world clock (or something idk)
+function getMouth() {
+    let isMouthOpen = true;
+    if(smiles.size() > 0) {
+        isMouthOpen = false;
+    }
+    return isMouthOpen;
+}
+function getFistPos() {
+    let biggestFistInd = 0;
+    if (fists.size() > 0) {
+        //find biggest fist
+        for (let i = 0; i < fists.size(); ++i) {
+            let fist = fists.get(i);
+            let bigFist = fists.get(biggestFistInd);
+            let fistArea = fist.width * fist.height;
+            let bigFistArea = bigFist.width * bigFist.height;
+            if (fistArea > bigFistArea) {
+                biggestFistInd = i;
+            }
+        }
+        let fist = fists.get(biggestFistInd);
+        //normalize values
+        return 1 - (fist.y / (video.height - fist.height));
+    } else {
+        return -1;
+    }
+}
 utils.loadOpenCv(() => {
     let fistCascadeFile = 'fist.xml';
     let smileCascadeFile = 'haarcascade_mcs_mouth.xml';

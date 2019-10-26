@@ -54,11 +54,10 @@ function update() {
       notes.remove(notesArr[i], true, true);
     }
   }
-  if (cursors.down.isDown) {
-    hand.setPosition(400,300);
-  } else if (cursors.up.isDown) {
-    hand.setPosition(400,0);
+  //moving hand up and down
+  if (fists != undefined && fists != null && getFistPos() != -1) {
+    hand.setPosition(400, 300 * (1- getFistPos()));
   } else {
-    hand.setPosition(400,150);
+    hand.setPosition(400, 150);
   }
 }
