@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import logoImg from "./assets/logo.png";
-
+import {makeSoundWrapper} from "./makeSound.js";
 const config = {
   type: Phaser.AUTO,
   parent: "game",
@@ -21,6 +21,7 @@ function preload() {
 }
 
 function create() {
+  makeSoundWrapper();
   const logo = this.add.image(400, 150, "logo");
   this.sound.add('despacito');
   this.tweens.add({
