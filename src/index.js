@@ -163,7 +163,7 @@ function update() {
 
     if (!doneWithNotes) {
       notes.create(noteBlocks[noteCounter].x + 500 - noteLengths[noteCounter] / 2 - clock, noteBlocks[noteCounter].y, 'square').setCrop(0,0,noteLengths[noteCounter],25);
-      if (noteCounter === 39) {
+      if (noteCounter === 39) { //CHANGE FOR START OF BACKGROUND (39 FOR DESPACITO)
         playSong(this);
       }
     }
