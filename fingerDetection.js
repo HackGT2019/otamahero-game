@@ -6,7 +6,7 @@ var canvasContext = canvasOutput.getContext('2d');
 var smiles;
 var fists;
 var video;
-
+var loading = true;
 function onVideoStarted() {
     streaming = true;
     video = document.getElementById('videoInput');
@@ -64,6 +64,12 @@ function onVideoStarted() {
             // schedule the next one.
             let delay = 1000/FPS - (Date.now() - begin);
             setTimeout(processVideo, delay);
+
+            if (loading) {  // get rid of the loading icon
+                loading = false;
+                document.getElementById('loader').remove();
+                document.getElementById('startBox').style.visibility = 'visible';
+            }
         } catch (err) {
             console.log(err);
             utils.printError(err);

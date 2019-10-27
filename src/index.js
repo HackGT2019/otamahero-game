@@ -26,6 +26,7 @@ const WIDTHSCALE = 2; //DON'T CHANGE BROKEN
 const CANVAS_WIDTH = window.innerWidth;
 const CANVAS_HEIGHT = window.innerHeight;
 
+var game;
 var musicParser = new MusicParser(despacito, CANVAS_HEIGHT, 500)
 var noteBlocks = musicParser.noteBlocks;
 var noteLengths = noteBlocks.map((element) => element.width);
@@ -49,10 +50,16 @@ const config = {
   }
 };
 
+const startButton = document.getElementById('startButton');
+startButton.addEventListener("click", startGame);
 
-const game = new Phaser.Game(config);
-game.height = config.height;
-game.width = config.width;
+function startGame() {
+  document.getElementById('startBox').remove();
+  game = new Phaser.Game(config);
+  game.height = config.height;
+  game.width = config.width;
+}
+
 
 function preload() {
 
@@ -175,10 +182,8 @@ function update() {
   //moving hand up and down
   const maxHeight = musicParser.playAreaRange[1];
 
-  if (fists != undefined && fists != null && getFistPos() != -1) {
+  if (fists != undefined && fists != null && (Math.pow(1.0 - getFistPos(), 2)) <= 1) {
     hand.setPosition(CANVAS_WIDTH / 2, musicParser.border + musicParser.totalPlaySize * (1- getFistPos()));
-  } else {
-    hand.setPosition(CANVAS_WIDTH / 2, maxHeight);
   }
 }
 
