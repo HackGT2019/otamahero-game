@@ -9,12 +9,16 @@ export class MusicParser {
         return 20;
     }
 
-    constructor(vocalMidi, gameHeight) {
+    constructor(vocalMidi, gameHeight, maxPlayAreaHeight) {
         this.vocalMidi = vocalMidi;
         this.gameHeight = gameHeight;
         if (this.gameHeight == null) {
             this.gameHeight = 300;
         }
+
+        this.border = Math.max(0, (gameHeight - maxPlayAreaHeight) / 2);
+        this.playAreaRange = [this.border + this.NOTE_BLOCK_HEIGHT_PX / 2, gameHeight - this.border - this.NOTE_BLOCK_HEIGHT_PX / 2]; // the range of possible y values
+        this.totalPlaySize = this.playAreaRange[1] - this.playAreaRange[0];
         this._processNotesFromTrack(vocalMidi.tracks[0]);
     }
 
@@ -43,7 +47,7 @@ export class MusicParser {
 
             const width = endEvent.delta * this.PIXELS_PER_TICK;
             const x = startX + width / 2; // phaser bases off midpoint
-            const y = this._getY(note);
+            const y = this.gameHeight - this._getY(note);
             const height = this.NOTE_BLOCK_HEIGHT_PX;
             output.push(new NoteBlock(x, y, width, height, note, 100));
         }
@@ -67,11 +71,11 @@ export class MusicParser {
     }
 
     _getYConversionFactor(gameWindowHeight, noteBlockHeight, noteExtrema) {
-        return (gameWindowHeight - noteBlockHeight) / (noteExtrema.range);
+        return (gameWindowHeight - noteBlockHeight - this.border * 2) / (noteExtrema.range);
     }
 
     _getY(noteNumber) {
-        return ((noteNumber - this.extrema.min) * this.yConversionFactor) + (this.NOTE_BLOCK_HEIGHT_PX / 2); // phaser bases off midpoint
+        return this.border + ((noteNumber - this.extrema.min) * this.yConversionFactor) + (this.NOTE_BLOCK_HEIGHT_PX / 2); // phaser bases off midpoint
     }
 
 }

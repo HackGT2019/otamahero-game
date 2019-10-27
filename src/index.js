@@ -23,10 +23,11 @@ var layerTwo;
 var layerThree;
 const OVERLAP = 10;
 const WIDTHSCALE = 2; //DON'T CHANGE BROKEN
-const CANVAS_WIDTH = 800;
-const CANVAS_HEIGHT = 300;
+const CANVAS_WIDTH = window.innerWidth;
+const CANVAS_HEIGHT = window.innerHeight;
 
-var noteBlocks = new MusicParser(despacito).noteBlocks;
+var musicParser = new MusicParser(despacito, CANVAS_HEIGHT, 500)
+var noteBlocks = musicParser.noteBlocks;
 var noteLengths = noteBlocks.map((element) => element.width);
 
 const config = {
@@ -79,7 +80,7 @@ function create() {
   createBackgrounds(this);
   playSong(this);
   makeSoundWrapper();
-  hand = this.physics.add.sprite(400, 150, 'connor2').setScale(.25);
+  hand = this.physics.add.sprite(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 'connor2').setScale(.25);
   hand.depth = 2;
   cursors = this.input.keyboard.createCursorKeys();
   notes = this.add.group(config);
@@ -172,10 +173,12 @@ function update() {
   }
   overlapping = false;
   //moving hand up and down
+  const maxHeight = musicParser.playAreaRange[1];
+
   if (fists != undefined && fists != null && getFistPos() != -1) {
-    hand.setPosition(400, 300 * (1- getFistPos()));
+    hand.setPosition(CANVAS_WIDTH / 2, musicParser.border + musicParser.totalPlaySize * (1- getFistPos()));
   } else {
-    hand.setPosition(400, 150);
+    hand.setPosition(CANVAS_WIDTH / 2, maxHeight);
   }
 }
 
