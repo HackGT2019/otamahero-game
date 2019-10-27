@@ -44,7 +44,7 @@ function onVideoStarted() {
             cv.cvtColor(dst, gray, cv.COLOR_RGBA2GRAY, 0);
             // detect faces.
             fistClassifier.detectMultiScale(gray, fists, 1.1, 3); //makes an array of all the faces and their x,y,x.length,y.length and stores in 'faces'
-            smileClassifier.detectMultiScale(gray, smiles, 1.2, 30); //what do parameters mean??
+            smileClassifier.detectMultiScale(gray, smiles, 1.3, 30); //what do parameters mean??
             // draw faces.
             for (let i = 0; i < fists.size(); ++i) {
                 let fist = fists.get(i);

@@ -10,7 +10,7 @@ import {makeSoundWrapper} from "./makeSound.js";
 const musicSheet = mary;
 const musicName = 'mary';
 const startDelay = 4; //39 for despacito; 4 for mary
-const SPEED = 17.65; //4.95 for despacito; 8.8 for mary
+const SPEED = 17.65; //4.95 for despacito; 17.65 for mary
 
 var hand;
 var cursors;
