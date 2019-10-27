@@ -13,17 +13,24 @@ var overlapping = false;
 var clock = 0;
 var noteCounter = 0;
 var doneWithNotes = false;
-const SPEED = 1;
+
+var score = 0;
+var scoreText;
+
+const SPEED = 10;
 const OVERLAP = 10;
-const WIDTHSCALE = 1; //DON'T CHANGE BROKEN
+const WIDTHSCALE = 2; //DON'T CHANGE BROKEN
+const CANVAS_WIDTH = 800;
+const CANVAS_HEIGHT = 300;
+
 var noteBlocks = new MusicParser(despacito).noteBlocks;
-var noteLengths = noteBlocks.map((element) => element.width * WIDTHSCALE);
+var noteLengths = noteBlocks.map((element) => element.width);
 
 const config = {
   type: Phaser.AUTO,
   parent: "game",
-  width: 800,
-  height: 300,
+  width: CANVAS_WIDTH,
+  height: CANVAS_HEIGHT,
   scene: {
     preload: preload,
     create: create,
@@ -51,9 +58,11 @@ function preload() {
   //trying to adjust for variable width scale (BROKEN)
   for (let i = 0; i < noteLengths.length; i++) {
     for (let j = i + 1; j < noteLengths.length; j++) {
-      //noteBlocks[j].x += ((noteLengths[i] / 2) * WIDTHSCALE);
+      noteBlocks[j].x += (noteLengths[i] * WIDTHSCALE - noteLengths[i]);
     }
   }
+
+  noteLengths = noteBlocks.map((element) => element.width * WIDTHSCALE);
 }
 
 function create() {
@@ -63,6 +72,7 @@ function create() {
   hand.depth = 2;
   cursors = this.input.keyboard.createCursorKeys();
   notes = this.add.group(config);
+  scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '16px', fill: '#ffffff' });
 
   notes.create(noteBlocks[noteCounter].x + 500 - noteLengths[noteCounter] / 2, noteBlocks[noteCounter].y, 'square').setCrop(0,0,noteLengths[noteCounter],25);
  
@@ -84,7 +94,7 @@ function create() {
 function update() {
   let notesArr = notes.getChildren();
   clock += SPEED;
-  if ((notesArr[notesArr.length - 1].x - 500 + noteLengths[noteCounter]) < 810) {
+  if ((notesArr[notesArr.length - 1].x - 500 + noteLengths[noteCounter]) < CANVAS_WIDTH) {
     noteCounter++;
     if (noteCounter >= noteLengths.length) {
       doneWithNotes = true;
@@ -98,10 +108,10 @@ function update() {
   //all overlapping stuff (COMPLETE)
   for (let i = 0; i < notesArr.length; i++) {
     notesArr[i].setPosition(notesArr[i].x - SPEED, notesArr[i].y);
-
-    if (Math.abs(hand.y - notesArr[i].y) < OVERLAP && Math.abs(hand.x - (notesArr[i].x - (500 - noteLengths / 2))) < noteLengths / 2) {
+    if (Math.abs(hand.y - notesArr[i].y) < OVERLAP && Math.abs(hand.x - (notesArr[i].x - (500 - noteLengths[noteCounter - notesArr.length + i] / 2))) < noteLengths[noteCounter - notesArr.length + i] / 2) {
       //play overlap animation
       overlapping = true;
+      console.log("overlapping");
     }
     if (notesArr[i].x + (notesArr[i].width / 2) < 0) { //this doesn't quite delete right away
       notes.remove(notesArr[i], true, true);
@@ -112,6 +122,8 @@ function update() {
   }
   if (overlapping) {
     this.anims.play('overlap',hand);
+    score += SPEED;
+    scoreText.setText('Score: ' + score);
   } else {
     this.anims.play('notOverlap',hand);
   }
