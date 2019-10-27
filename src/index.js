@@ -2,13 +2,20 @@ import Phaser, { Scene } from "phaser";
 import connorImg from "./assets/fist.png";
 import squareImg from "./assets/square.png";
 import despacito from './assets/audio/despacito/despacito';
+import mary from './assets/audio/mary/mary';
 import {MusicParser} from "./audio/music-parser";
 import {makeSoundWrapper} from "./makeSound.js";
+
+// MUSIC CONFIG
+const musicSheet = mary;
+const musicName = 'mary';
+const startDelay = 4;
+const SPEED = 12; //4.95 for despacito; 8 for mary
 
 var hand;
 var cursors;
 var notes;
-var music;
+var music = null;
 var overlapping = false;
 var clock = 0;
 var noteCounter = 0;
@@ -17,7 +24,6 @@ var doneWithNotes = false;
 var score = 0;
 var scoreText;
 //const PIXPERTICK = .5; //TODO: change to actually pull from music parser file 
-const SPEED = 4.95; //4.95 for despacito
 var layerOne;
 var layerTwo;
 var layerThree;
@@ -39,7 +45,7 @@ startButton.addEventListener("click", startGame);
 function startGame() {
   canvasWidth = window.innerWidth;
   canvasHeight = window.innerHeight;
-  musicParser = new MusicParser(despacito, canvasHeight, 500)
+  musicParser = new MusicParser(musicSheet, canvasHeight, 500)
   noteBlocks = musicParser.noteBlocks;
   noteLengths = noteBlocks.map((element) => element.width);
   document.getElementById('startBox').remove();
@@ -71,6 +77,8 @@ function startGame() {
 function preload() {
 
   this.load.audio("despacito", 'src/assets/audio/despacito/Despacito_NO_VOCALS.mp3');
+  this.load.audio("mary", 'src/assets/audio/mary/mary_NO_VOCALS.mp3');
+
   this.load.image('connor', connorImg);
   this.load.spritesheet('connor2', connorImg, {frameWidth: 200, frameHeight: 200, startFrame:0, endFrame:1});
   this.load.image('square', squareImg);
@@ -95,7 +103,6 @@ function preload() {
 
 function create() {
   createBackgrounds(this);
-//  playSong(this);
   makeSoundWrapper();
   hand = this.physics.add.sprite(canvasWidth / 5, canvasHeight / 2, 'connor2').setScale(.25);
   hand.depth = 2;
@@ -163,7 +170,9 @@ function update() {
 
     if (!doneWithNotes) {
       notes.create(noteBlocks[noteCounter].x + 500 - noteLengths[noteCounter] / 2 - clock, noteBlocks[noteCounter].y, 'square').setCrop(0,0,noteLengths[noteCounter],25);
-      if (noteCounter === 39) { //CHANGE FOR START OF BACKGROUND (39 FOR DESPACITO)
+
+      if (noteCounter >= startDelay && music == null) { //CHANGE FOR START OF BACKGROUND (39 FOR DESPACITO)
+        console.log("test");
         playSong(this);
       }
     }
@@ -185,7 +194,7 @@ function update() {
   }
   if (overlapping) {
     this.anims.play('overlap',hand);
-    score += parseInt(SPEED;
+    score += parseInt(SPEED);
     scoreText.setText('Score: ' + score);
   } else {
     this.anims.play('notOverlap',hand);
@@ -209,5 +218,5 @@ function playSong(scene) {
   if (music != null) {
     music.stop();
   }
-  music = scene.sound.play("despacito", {volume: 2.5});
+  music = scene.sound.play(musicName, {volume: 2.5});
 }
