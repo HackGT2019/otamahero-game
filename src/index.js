@@ -17,7 +17,7 @@ var doneWithNotes = false;
 var score = 0;
 var scoreText;
 //const PIXPERTICK = .5; //TODO: change to actually pull from music parser file 
-const SPEED = 6;
+const SPEED = 4.95; //4.95 for despacito
 var layerOne;
 var layerTwo;
 var layerThree;
@@ -95,7 +95,7 @@ function preload() {
 
 function create() {
   createBackgrounds(this);
-  playSong(this);
+//  playSong(this);
   makeSoundWrapper();
   hand = this.physics.add.sprite(canvasWidth / 5, canvasHeight / 2, 'connor2').setScale(.25);
   hand.depth = 2;
@@ -163,6 +163,9 @@ function update() {
 
     if (!doneWithNotes) {
       notes.create(noteBlocks[noteCounter].x + 500 - noteLengths[noteCounter] / 2 - clock, noteBlocks[noteCounter].y, 'square').setCrop(0,0,noteLengths[noteCounter],25);
+      if (noteCounter === 39) {
+        playSong(this);
+      }
     }
   }
 
