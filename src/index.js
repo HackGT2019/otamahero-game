@@ -185,7 +185,7 @@ function update() {
   }
   if (overlapping) {
     this.anims.play('overlap',hand);
-    score += SPEED;
+    score += parseInt(SPEED;
     scoreText.setText('Score: ' + score);
   } else {
     this.anims.play('notOverlap',hand);
