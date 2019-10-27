@@ -101,7 +101,7 @@ function create() {
   hand.depth = 2;
   cursors = this.input.keyboard.createCursorKeys();
   notes = this.add.group(config);
-  scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '16px', fill: '#ffffff' });
+  scoreText = this.add.text(35, 270, 'score: 0', { fontSize: '20px', fill: '#ffffff', fontFamily: 'Merienda' });
 
   notes.create(noteBlocks[noteCounter].x + 500 - noteLengths[noteCounter] / 2, noteBlocks[noteCounter].y, 'square').setCrop(0,0,noteLengths[noteCounter],25);
  
