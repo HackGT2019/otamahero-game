@@ -71,7 +71,6 @@ function update() {
   let notesArr = notes.getChildren();
   for (let i = 0; i < notesArr.length; i++) {
     notesArr[i].setPosition(notesArr[i].x - SPEED, notesArr[i].y);
-    console.log(hand.anims.isPlaying);
     if (Math.abs(hand.y - notesArr[i].y) < OVERLAP && Math.abs(hand.x - notesArr[i].x) < notesArr[i].width / 2) {
       //play overlap animation
       this.anims.play('overlap',hand);
