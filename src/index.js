@@ -9,8 +9,8 @@ import {makeSoundWrapper} from "./makeSound.js";
 // MUSIC CONFIG
 const musicSheet = mary;
 const musicName = 'mary';
-const startDelay = 4;
-const SPEED = 12; //4.95 for despacito; 8 for mary
+const startDelay = 4; //39 for despacito; 4 for mary
+const SPEED = 17.65; //4.95 for despacito; 8.8 for mary
 
 var hand;
 var cursors;
@@ -45,7 +45,6 @@ const startButton = document.getElementById('startButton');
 startButton.addEventListener("click", startGame);
 
 document.getElementById('controlButton').addEventListener("click", () => {
-  console.log('test');
   useMouse = !useMouse;  
 });
 
@@ -113,7 +112,7 @@ function create() {
   makeSoundWrapper(() => {
     let output;
     if (useMouse) {
-      output = this.input.mousePointer.y / canvasHeight;
+      output = 1 - (this.input.mousePointer.y / canvasHeightgetPositionFunction);
     } else {
       const fistPos = getFistPos();
       if (fistPos === -261.63) {
@@ -123,8 +122,8 @@ function create() {
       }
     }
     return output;
-  });
-  hand = this.physics.add.sprite(canvasWidth / 5, canvasHeight / 2, 'connor2').setScale(.25);
+  }, musicParser);
+  hand = this.physics.add.sprite(canvasWidth / 4, canvasHeight / 2, 'connor2').setScale(.25);
   hand.depth = 2;
   cursors = this.input.keyboard.createCursorKeys();
   notes = this.add.group(config);
@@ -223,10 +222,10 @@ function update() {
   const maxHeight = musicParser.playAreaRange[1];
   let mouseObj = this.input.mousePointer;
   if (useMouse) {
-    hand.setPosition(canvasWidth / 5, this.input.mousePointer.y);
+    hand.setPosition(canvasWidth / 4, this.input.mousePointer.y);
   } else {
     if (fists != undefined && fists != null && (Math.pow(1.0 - getFistPos(), 2)) <= 1) {
-         hand.setPosition(canvasWidth / 5, musicParser.border + musicParser.totalPlaySize * (1- getFistPos()));
+         hand.setPosition(canvasWidth / 4, musicParser.border + musicParser.totalPlaySize * (1- getFistPos()));
     } 
   }
 }

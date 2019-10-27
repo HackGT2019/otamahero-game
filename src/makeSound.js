@@ -1,6 +1,6 @@
 import Tone from "tone";
 
-export function makeSoundWrapper(getPositionFunction) {
+export function makeSoundWrapper(getPositionFunction, musicPlayer) {
   
   let synth = new Tone.Synth().toMaster();
   Tone.context.resume();
@@ -10,9 +10,8 @@ export function makeSoundWrapper(getPositionFunction) {
   function changeSound(mouthOpen, position) {
     Tone.context.resume();
     if (mouthOpen && position >= 0) {
-      console.log(position);
-      let highFrequency = 1046.50;
-      let lowFrequency = 	261.63;
+      let lowFrequency = 	noteToFrequency(musicPlayer.extrema.min); //261.63 for despacito
+      let highFrequency = noteToFrequency(musicPlayer.extrema.max); //1046.50 for despacito;
       let tone = ((highFrequency - lowFrequency) * position) + lowFrequency;
       lastTone = tone;
       synth.setNote(tone);
@@ -29,3 +28,7 @@ export function makeSoundWrapper(getPositionFunction) {
   }
 }
 
+function noteToFrequency(note) {
+  const a = 440;
+  return (a / 32) * (2 ** ((note - 9) / 12));
+}
