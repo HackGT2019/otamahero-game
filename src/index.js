@@ -18,6 +18,9 @@ var score = 0;
 var scoreText;
 
 const SPEED = 10;
+var layerOne;
+var layerTwo;
+var layerThree;
 const OVERLAP = 10;
 const WIDTHSCALE = 2; //DON'T CHANGE BROKEN
 const CANVAS_WIDTH = 800;
@@ -47,13 +50,20 @@ const config = {
 
 
 const game = new Phaser.Game(config);
+game.height = config.height;
+game.width = config.width;
 
 function preload() {
 
-  this.load.audio("despacito", 'src/assets/audio/despacito/Despacito_NO_VOCALS.mp3');  // urls: an array of file url
+  this.load.audio("despacito", 'src/assets/audio/despacito/Despacito_NO_VOCALS.mp3');
   this.load.image('connor', connorImg);
   this.load.spritesheet('connor2', connorImg, {frameWidth: 141, frameHeight: 188, startFrame:0, endFrame:1});
   this.load.image('square', squareImg);
+
+  // load background images
+  this.load.image('layer-three', 'src/assets/pictures/three.png');
+  this.load.image('layer-two', 'src/assets/pictures/two.png');
+  this.load.image('layer-one', 'src/assets/pictures/one.png');
 
   //trying to adjust for variable width scale (BROKEN)
   for (let i = 0; i < noteLengths.length; i++) {
@@ -66,6 +76,7 @@ function preload() {
 }
 
 function create() {
+  createBackgrounds(this);
   playSong(this);
   makeSoundWrapper();
   hand = this.physics.add.sprite(400, 150, 'connor2').setScale(.25);
@@ -91,7 +102,39 @@ function create() {
 
 }
 
+function createBackgrounds(stage) {
+  //Set the games background colour
+  stage.cameras.main.setBackgroundColor('#697e96');
+  const imageThree = stage.textures.get('layer-three').getSourceImage();
+  const imageTwo = stage.textures.get('layer-two').getSourceImage();
+  const imageOne = stage.textures.get('layer-one').getSourceImage();
+
+
+  layerThree = stage.add.tileSprite(game.width / 2,
+      game.height - imageThree.height / 2,
+      game.width,
+      imageThree.height,
+      'layer-three'
+  );
+
+  layerTwo = stage.add.tileSprite(game.width / 2,
+      game.height - imageTwo.height / 2,
+      game.width,
+      imageTwo.height,
+      'layer-two'
+  );
+
+  layerOne = stage.add.tileSprite(game.width / 2,
+      game.height - imageOne.height / 2,
+      game.width,
+      imageOne.height,
+      'layer-one'
+  );
+}
+
 function update() {
+  updateBackgrounds();
+
   let notesArr = notes.getChildren();
   clock += SPEED;
   if ((notesArr[notesArr.length - 1].x - 500 + noteLengths[noteCounter]) < CANVAS_WIDTH) {
@@ -134,6 +177,12 @@ function update() {
   } else {
     hand.setPosition(400, 150);
   }
+}
+
+function updateBackgrounds() {
+  layerThree.tilePositionX += 0.05;
+  layerTwo.tilePositionX += 0.3;
+  layerOne.tilePositionX += 0.75;
 }
 
 function playSong(scene) {
