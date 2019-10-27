@@ -45,6 +45,7 @@ const startButton = document.getElementById('startButton');
 startButton.addEventListener("click", startGame);
 
 document.getElementById('controlButton').addEventListener("click", () => {
+  console.log('test');
   useMouse = !useMouse;  
 });
 
@@ -178,7 +179,6 @@ function update() {
       notes.create(noteBlocks[noteCounter].x + 500 - noteLengths[noteCounter] / 2 - clock, noteBlocks[noteCounter].y, 'square').setCrop(0,0,noteLengths[noteCounter],25);
 
       if (noteCounter >= startDelay && music == null) { //CHANGE FOR START OF BACKGROUND (39 FOR DESPACITO)
-        console.log("test");
         playSong(this);
       }
     }
@@ -198,7 +198,7 @@ function update() {
       }
     }
   }
-  if (overlapping) {
+  if (overlapping && getMouth()) {
     this.anims.play('overlap',hand);
     score += parseInt(SPEED);
     scoreText.setText('Score: ' + score);
