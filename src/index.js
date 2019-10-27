@@ -7,10 +7,9 @@ import {makeSoundWrapper} from "./makeSound.js";
 var hand;
 var cursors;
 var notes;
+var music;
 const SPEED = 2;
 const OVERLAP = 10;
-
-new MusicParser(despacito);
 
 const config = {
   type: Phaser.AUTO,
@@ -38,14 +37,14 @@ const game = new Phaser.Game(config);
 function preload() {
   this.load.image('connor', logoImg);
   this.load.spritesheet('connor2', logoImg, {frameWidth: 141, frameHeight: 188, startFrame:0, endFrame:1});
-  //this.load.audio("despacito", 'src/assets/audio/despacito/wav_despacito_NO_VOCALS.wav');  // urls: an array of file url
+  this.load.audio("despacito", 'src/assets/audio/despacito/Despacito_NO_VOCALS.mp3');  // urls: an array of file url
 
 }
 
 function create() {
+  playSong(this);
   makeSoundWrapper();
   hand = this.physics.add.sprite(400, 150, 'connor2').setScale(.25);
-
   hand.depth = 2;
   cursors = this.input.keyboard.createCursorKeys();
   notes = this.add.group(config);
@@ -63,15 +62,12 @@ function create() {
     frameRate: 20,
   });
 
-  //this.sound.add('despacito');
-  //this.sound.play('despacito');
 }
 
 function update() {
   let notesArr = notes.getChildren();
   for (let i = 0; i < notesArr.length; i++) {
     notesArr[i].setPosition(notesArr[i].x - SPEED, notesArr[i].y);
-    console.log(hand.anims.isPlaying);
     if (Math.abs(hand.y - notesArr[i].y) < OVERLAP && Math.abs(hand.x - notesArr[i].x) < notesArr[i].width / 2) {
       //play overlap animation
       this.anims.play('overlap',hand);
@@ -88,4 +84,11 @@ function update() {
   } else {
     hand.setPosition(400, 150);
   }
+}
+
+function playSong(scene) {
+  if (music != null) {
+    music.stop();
+  }
+  music = scene.sound.play("despacito");
 }
