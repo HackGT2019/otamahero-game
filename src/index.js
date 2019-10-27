@@ -110,7 +110,20 @@ function preload() {
 
 function create() {
   createBackgrounds(this);
-  makeSoundWrapper();
+  makeSoundWrapper(() => {
+    let output;
+    if (useMouse) {
+      output = this.input.mousePointer.y / canvasHeight;
+    } else {
+      const fistPos = getFistPos();
+      if (fistPos === -261.63) {
+        output = -1;
+      } else {
+        output = fistPos;
+      }
+    }
+    return output;
+  });
   hand = this.physics.add.sprite(canvasWidth / 5, canvasHeight / 2, 'connor2').setScale(.25);
   hand.depth = 2;
   cursors = this.input.keyboard.createCursorKeys();

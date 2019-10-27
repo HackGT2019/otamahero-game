@@ -1,6 +1,6 @@
 import Tone from "tone";
 
-export function makeSoundWrapper() {
+export function makeSoundWrapper(getPositionFunction) {
   
   let synth = new Tone.Synth().toMaster();
   Tone.context.resume();
@@ -9,7 +9,8 @@ export function makeSoundWrapper() {
   let lastTone = 0;
   function changeSound(mouthOpen, position) {
     Tone.context.resume();
-    if (mouthOpen && position != -261.63) {
+    if (mouthOpen && position >= 0) {
+      console.log(position);
       let highFrequency = 1046.50;
       let lowFrequency = 	261.63;
       let tone = ((highFrequency - lowFrequency) * position) + lowFrequency;
@@ -23,7 +24,7 @@ export function makeSoundWrapper() {
 
 
     tid = setTimeout(() => {
-      changeSound(getMouth(), getFistPos())
+      changeSound(getMouth(), getPositionFunction())
     }, 10); // repeat myself
   }
 }
