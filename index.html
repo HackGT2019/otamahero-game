@@ -3,18 +3,20 @@
   <head>
       <link rel="stylesheet" type = "text/css" href="styles.css">
       <link href='https://fonts.googleapis.com/css?family=Merienda' rel='stylesheet'>
-    <meta charset="utf-8">
+      <title>Otamahero</title>
+      <meta charset="utf-8">
   </head>
-<!--  <h1>Otamahero</h1>-->
+  <h1 class="header">Otamahero</h1>
   <body>
     <div id="loader" class="loader-wrapper">
       <div class="loader">
       </div>
     </div>
 
-    <div style="position: absolute; z-index: 1">
+    <div style="position: absolute; z-index: 1; left: -100px; top: 50px;">
       <video style="visibility: hidden;" id="videoInput" width=320 height=240></video>
       <canvas id="canvasOutput" width=320 height=240></canvas>
+      <img style="position: absolute; right: -35px; top: -35px; object-fit: contain; width: 150px;" src="./src/assets/logo.png">
     </div>
     <div id="startBox">
       <button id="startButton">Start Game</button>

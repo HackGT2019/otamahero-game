@@ -1,3 +1,6 @@
+#canvasOutput {
+    box-shadow: 7px 7px 7px grey;
+}
 #startBox {
     position: absolute;
     z-index: 2;
@@ -10,6 +13,14 @@
     justify-content: center;
     visibility: hidden;
 }
+button {
+    text-shadow: 3px 2px 2px gray;
+    border-radius: 10px;
+    color: white;
+    font-family: 'Merienda';
+    font-size: 40px;
+    -webkit-text-stroke: 1px black;
+}
 .loader {
     border: 16px solid #f3f3f3;
     border-radius: 50%;
@@ -21,7 +32,7 @@
 }
 .loader-wrapper {
     align-items: center;
-    background-color: rgba(0, 0, 0, .8);
+    background-color: rgba(0, 0, 0, 1);
     display: flex;
     left: 0;
     height: 100%;
@@ -52,11 +63,11 @@ h1 {
 
 body {
     background-image: url("./src/assets/32169.jpg");
+    margin: 0;
+    padding: 0;
 }
-
-/*#canvasOutput {*/
-/*    right: 0px;*/
-/*    top: 0px;*/
-/*    box-shadow: 7px 7px 7px grey;*/
-/*    position: absolute;*/
-/*}*/
+.header {
+    position: absolute;
+    width: 100%;
+    z-index: 5;
+}

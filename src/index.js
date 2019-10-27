@@ -204,5 +204,5 @@ function playSong(scene) {
   if (music != null) {
     music.stop();
   }
-  music = scene.sound.play("despacito");
+  music = scene.sound.play("despacito", {volume: 2.5});
 }
