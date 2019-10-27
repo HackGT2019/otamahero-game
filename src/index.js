@@ -1,5 +1,5 @@
 import Phaser, { Scene } from "phaser";
-import connorImg from "./assets/connor.jpg";
+import connorImg from "./assets/fist.png";
 import squareImg from "./assets/square.png";
 import despacito from './assets/audio/despacito/despacito';
 import {MusicParser} from "./audio/music-parser";
@@ -16,12 +16,12 @@ var doneWithNotes = false;
 
 var score = 0;
 var scoreText;
-
-const SPEED = 10;
+//const PIXPERTICK = .5; //TODO: change to actually pull from music parser file 
+const SPEED = 6;
 var layerOne;
 var layerTwo;
 var layerThree;
-const OVERLAP = 10;
+const OVERLAP = 25;
 const WIDTHSCALE = 2; //DON'T CHANGE BROKEN
 var canvasWidth;
 var canvasHeight;
@@ -72,7 +72,7 @@ function preload() {
 
   this.load.audio("despacito", 'src/assets/audio/despacito/Despacito_NO_VOCALS.mp3');
   this.load.image('connor', connorImg);
-  this.load.spritesheet('connor2', connorImg, {frameWidth: 141, frameHeight: 188, startFrame:0, endFrame:1});
+  this.load.spritesheet('connor2', connorImg, {frameWidth: 200, frameHeight: 200, startFrame:0, endFrame:1});
   this.load.image('square', squareImg);
 
   // load background images
@@ -86,7 +86,10 @@ function preload() {
       noteBlocks[j].x += (noteLengths[i] * WIDTHSCALE - noteLengths[i]);
     }
   }
-
+  //move absolute positions so it starts later
+  for (let i = 0; i < noteLengths.length; i++) {
+    noteBlocks[i].x += canvasWidth; // <-- change here
+  }
   noteLengths = noteBlocks.map((element) => element.width * WIDTHSCALE);
 }
 
@@ -94,7 +97,7 @@ function create() {
   createBackgrounds(this);
   playSong(this);
   makeSoundWrapper();
-  hand = this.physics.add.sprite(canvasWidth / 2, canvasHeight / 2, 'connor2').setScale(.25);
+  hand = this.physics.add.sprite(canvasWidth / 5, canvasHeight / 2, 'connor2').setScale(.25);
   hand.depth = 2;
   cursors = this.input.keyboard.createCursorKeys();
   notes = this.add.group(config);
@@ -169,7 +172,6 @@ function update() {
     if (Math.abs(hand.y - notesArr[i].y) < OVERLAP && Math.abs(hand.x - (notesArr[i].x - (500 - noteLengths[noteCounter - notesArr.length + i] / 2))) < noteLengths[noteCounter - notesArr.length + i] / 2) {
       //play overlap animation
       overlapping = true;
-      console.log("overlapping");
     }
     if (notesArr[i].x + (notesArr[i].width / 2) < 0) { //this doesn't quite delete right away
       notes.remove(notesArr[i], true, true);
@@ -190,7 +192,7 @@ function update() {
   const maxHeight = musicParser.playAreaRange[1];
 
   if (fists != undefined && fists != null && (Math.pow(1.0 - getFistPos(), 2)) <= 1) {
-    hand.setPosition(canvasWidth / 2, musicParser.border + musicParser.totalPlaySize * (1- getFistPos()));
+    hand.setPosition(canvasWidth / 5, musicParser.border + musicParser.totalPlaySize * (1- getFistPos()));
   }
 }
 
