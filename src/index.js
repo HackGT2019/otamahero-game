@@ -23,41 +23,48 @@ var layerTwo;
 var layerThree;
 const OVERLAP = 10;
 const WIDTHSCALE = 2; //DON'T CHANGE BROKEN
-const CANVAS_WIDTH = window.innerWidth;
-const CANVAS_HEIGHT = window.innerHeight;
+var canvasWidth;
+var canvasHeight;
 
 var game;
-var musicParser = new MusicParser(despacito, CANVAS_HEIGHT, 500)
-var noteBlocks = musicParser.noteBlocks;
-var noteLengths = noteBlocks.map((element) => element.width);
+var musicParser;
+var noteBlocks;
+var noteLengths;
 
-const config = {
-  type: Phaser.AUTO,
-  parent: "game",
-  width: CANVAS_WIDTH,
-  height: CANVAS_HEIGHT,
-  scene: {
-    preload: preload,
-    create: create,
-    update: update
-  },
-  physics: {
-    default: 'arcade',
-    arcade: {
-      gravity: { y:0},
-      debug: false
-    }
-  }
-};
+let config;
 
 const startButton = document.getElementById('startButton');
 startButton.addEventListener("click", startGame);
 
 function startGame() {
+  canvasWidth = window.innerWidth;
+  canvasHeight = window.innerHeight;
+  musicParser = new MusicParser(despacito, canvasHeight, 500)
+  noteBlocks = musicParser.noteBlocks;
+  noteLengths = noteBlocks.map((element) => element.width);
   document.getElementById('startBox').remove();
+  config = {
+    type: Phaser.AUTO,
+    parent: "game",
+    width: canvasWidth,
+    height: canvasHeight,
+    scene: {
+      preload: preload,
+      create: create,
+      update: update
+    },
+    physics: {
+      default: 'arcade',
+      arcade: {
+        gravity: { y:0},
+        debug: false
+      }
+    }
+  };
   game = new Phaser.Game(config);
   game.height = config.height;
   game.width = config.width;
+
 }
 
 
@@ -87,7 +94,7 @@ function create() {
   createBackgrounds(this);
   playSong(this);
   makeSoundWrapper();
-  hand = this.physics.add.sprite(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 'connor2').setScale(.25);
+  hand = this.physics.add.sprite(canvasWidth / 2, canvasHeight / 2, 'connor2').setScale(.25);
   hand.depth = 2;
   cursors = this.input.keyboard.createCursorKeys();
   notes = this.add.group(config);
@@ -145,7 +152,7 @@ function update() {
 
   let notesArr = notes.getChildren();
   clock += SPEED;
-  if ((notesArr[notesArr.length - 1].x - 500 + noteLengths[noteCounter]) < CANVAS_WIDTH) {
+  if ((notesArr[notesArr.length - 1].x - 500 + noteLengths[noteCounter]) < canvasWidth) {
     noteCounter++;
     if (noteCounter >= noteLengths.length) {
       doneWithNotes = true;
@@ -183,7 +190,7 @@ function update() {
   const maxHeight = musicParser.playAreaRange[1];
 
   if (fists != undefined && fists != null && (Math.pow(1.0 - getFistPos(), 2)) <= 1) {
-    hand.setPosition(CANVAS_WIDTH / 2, musicParser.border + musicParser.totalPlaySize * (1- getFistPos()));
+    hand.setPosition(canvasWidth / 2, musicParser.border + musicParser.totalPlaySize * (1- getFistPos()));
   }
 }
 

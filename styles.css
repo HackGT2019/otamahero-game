@@ -41,3 +41,22 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+h1 {
+    color: white;
+    text-align:center;
+    text-shadow: 3px 2px 2px gray;
+    font-family: 'Merienda';
+    font-size: 80px;
+    font-style: italic;
+}
+
+body {
+    background-image: url("./src/assets/32169.jpg");
+}
+
+/*#canvasOutput {*/
+/*    right: 0px;*/
+/*    top: 0px;*/
+/*    box-shadow: 7px 7px 7px grey;*/
+/*    position: absolute;*/
+/*}*/

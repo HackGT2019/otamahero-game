@@ -5,7 +5,7 @@ export function makeSoundWrapper() {
   let synth = new Tone.Synth().toMaster();
   Tone.context.resume();
   synth.triggerAttackRelease(0, 300);
-  let tid = setTimeout(changeSound(true, 0.3), 0);
+  let tid = setTimeout(changeSound(false, 0), 0);
   let lastTone = 0;
   function changeSound(mouthOpen, position) {
     Tone.context.resume();
@@ -24,7 +24,7 @@ export function makeSoundWrapper() {
 
     tid = setTimeout(() => {
       changeSound(getMouth(), getFistPos())
-    }, 1); // repeat myself
+    }, 10); // repeat myself
   }
 }
 
