@@ -13,13 +13,24 @@
     justify-content: center;
     visibility: hidden;
 }
-button {
+#startButton {
     text-shadow: 3px 2px 2px gray;
     border-radius: 10px;
     color: white;
     font-family: 'Merienda';
     font-size: 40px;
     -webkit-text-stroke: 1px black;
+}
+#controlButton {
+    text-shadow: 3px 2px 2px gray;
+    border-radius: 10px;
+    color: white;
+    font-family: 'Merienda';
+    font-size: 19px;
+    -webkit-text-stroke: 1px black;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
 }
 .loader {
     border: 16px solid #f3f3f3;

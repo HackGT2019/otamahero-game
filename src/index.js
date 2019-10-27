@@ -33,8 +33,14 @@ var noteLengths;
 
 let config;
 
+var useMouse = false;
+
 const startButton = document.getElementById('startButton');
 startButton.addEventListener("click", startGame);
+
+document.getElementById('controlButton').addEventListener("click", () => {
+  useMouse = !useMouse;  
+});
 
 function startGame() {
   canvasWidth = window.innerWidth;
@@ -190,9 +196,13 @@ function update() {
   overlapping = false;
   //moving hand up and down
   const maxHeight = musicParser.playAreaRange[1];
-
-  if (fists != undefined && fists != null && (Math.pow(1.0 - getFistPos(), 2)) <= 1) {
-    hand.setPosition(canvasWidth / 5, musicParser.border + musicParser.totalPlaySize * (1- getFistPos()));
+  let mouseObj = this.input.mousePointer;
+  if (useMouse) {
+    hand.setPosition(canvasWidth / 5, this.input.mousePointer.y);
+  } else {
+    if (fists != undefined && fists != null && (Math.pow(1.0 - getFistPos(), 2)) <= 1) {
+         hand.setPosition(canvasWidth / 5, musicParser.border + musicParser.totalPlaySize * (1- getFistPos()));
+    } 
   }
 }
 
